@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, type FC } from "react"
+import { useCallback, useState, useMemo, type FC, useEffect } from "react"
 import { actualValueToDisplayValue, displayIndexToActualIndex } from "./utils"
 import UserList from "./UserList"
 import MentionTextarea from "./MentionTextarea"
@@ -72,6 +72,10 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
   const handleMentionCoordinates = useCallback((x: number, y: number) => {
     setAmpersandPosition([x + 10, y + 10])
   }, [])
+
+  useEffect(() => {
+    setSelectedUserIndex(0)
+  }, [filteredUsers.length])
 
   return (
     <div style={{ position: "relative" }}>
