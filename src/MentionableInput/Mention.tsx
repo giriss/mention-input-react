@@ -1,12 +1,8 @@
-import { ComponentProps, FC } from "react";
+import styled from "@emotion/styled"
 
-type MentionProps = Omit<ComponentProps<"span">, "style">
-
-const Mention: FC<MentionProps> = props => (
-  <span
-    style={{ color: "red", textShadow: "0 0 5px violet" }}
-    {...props}
-  />
-)
+const Mention = styled.span`
+  color: rgb(0, 150, 210);
+  text-shadow: 0 0 5px rgba(0, 150, 210, .8);
+`
 
 export default Mention

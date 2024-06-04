@@ -5,8 +5,10 @@ const App: FC = () => {
   return (
     <MentionableInput
       users={[
-        { id: "asdf", fullname: "Asdf Fdsa" },
+        { id: "alia", fullname: "Alia Bhatt" },
         { id: "girish", fullname: "Girish Gopaul" },
+        { id: "bob", fullname: "Bob Marley" },
+        { id: "varun", fullname: "Varun Dhawan" },
       ]}
     />
   )
