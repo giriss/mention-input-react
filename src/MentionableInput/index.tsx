@@ -1,4 +1,5 @@
 import { useCallback, useState, useMemo, type FC, useEffect } from "react"
+import styled from "@emotion/styled"
 import { actualValueToDisplayValue, displayIndexToActualIndex } from "./utils"
 import UserList from "./UserList"
 import MentionTextarea from "./MentionTextarea"
@@ -40,14 +41,19 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
     }
   }, [selectedUserIndex, filteredUsers.length])
 
-  const handleEnterKey = useCallback(() => {
-    const selectedUser = filteredUsers[selectedUserIndex]
+  const mentionUser = useCallback((index: number) => {
+    const selectedUser = filteredUsers[index]
     setActualValue(actualValue => {
       if (!ampersandLocation) return actualValue
 
       return actualValue.substring(0, displayIndexToActualIndex(ampersandLocation, actualValue)) + `@[${selectedUser.id};${selectedUser.fullname}]` + actualValue.substring(displayIndexToActualIndex(selectionStart, actualValue))
     })
-  }, [filteredUsers, selectedUserIndex, ampersandLocation, selectionStart])
+    removeMentionList()
+  }, [ampersandLocation, selectionStart, filteredUsers, removeMentionList])
+
+  const handleEnterKey = useCallback(() => {
+    mentionUser(selectedUserIndex)
+  }, [selectedUserIndex, mentionUser])
 
   const handleMentionStart = useCallback((location: number) => {
     setAmpersandLocation(location)
@@ -73,13 +79,17 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
     setAmpersandPosition([x + 10, y + 10])
   }, [])
 
+  const handleSelect = useCallback((index: number) => {
+    mentionUser(index)
+  }, [mentionUser])
+
   useEffect(() => {
     setSelectedUserIndex(0)
   }, [filteredUsers.length])
 
   return (
-    <div style={{ position: "relative" }}>
-      <div style={{ position: "relative", display: "inline-block" }}>
+    <Box relative>
+      <Box relative inlineBlock>
         <MentionOverlay
           scrollTop={overlayScrollTop}
           ampersandLocation={ampersandLocation}
@@ -97,17 +107,22 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
           onScrollTopChange={handleScrollTop}
           onUpOrDownKey={ampersandLocation == null ? undefined : handleUpOrDownKey}
         />
-      </div>
-
+      </Box>
       {mentionFilter != null && ampersandPosition && (
         <UserList
           users={filteredUsers}
           position={ampersandPosition}
           selectedIndex={selectedUserIndex}
+          onSelect={handleSelect}
         />
       )}
-    </div>
+    </Box>
   )
 }
+
+const Box = styled.div<{ relative?: boolean, inlineBlock?: boolean }>`
+  ${({ relative }) => relative && 'position: relative;'}
+  ${({ inlineBlock }) => inlineBlock && 'display: inline-block;'}
+`
 
 export default MentionableInput
