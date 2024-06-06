@@ -1,6 +1,13 @@
-import { ChangeEventHandler, FC, KeyboardEventHandler, UIEventHandler, useCallback, useRef } from "react";
+import {
+  ChangeEventHandler,
+  FC,
+  KeyboardEventHandler,
+  UIEventHandler,
+  useCallback,
+  useRef,
+} from "react"
 import styled from "@emotion/styled"
-import { calculateChange, displayIndexToActualIndex } from "./utils";
+import { calculateChange, displayIndexToActualIndex } from "./utils"
 
 export const MentionTextareaCommon = styled.textarea`
   padding: 10px;
@@ -16,7 +23,7 @@ const MentionTextareaBase = styled(MentionTextareaCommon)`
   background: transparent;
   color: transparent;
   caret-color: black;
-  border-color: rgba(0, 190, 255, .5);
+  border-color: rgba(0, 190, 255, 0.5);
   outline: none;
   min-width: 400px;
   min-height: 150px;
@@ -37,30 +44,53 @@ interface MentionTextareaProps {
   onSelectionChange: (selectionStart: number, selectionEnd: number) => void
 }
 
-const MentionTextarea: FC<MentionTextareaProps> = ({ value, displayedValue, onMentionStart, onChange, onScrollTopChange, onUpOrDownKey, onEnterKey, onSelectionChange }) => {
+const MentionTextarea: FC<MentionTextareaProps> = ({
+  value,
+  displayedValue,
+  onMentionStart,
+  onChange,
+  onScrollTopChange,
+  onUpOrDownKey,
+  onEnterKey,
+  onSelectionChange,
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = useCallback(event => {
-    const [start, end, replacement] = calculateChange(displayedValue, event.target.value)
-    if (start === end && replacement === "@") {
-      onMentionStart(start)
-    }
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = useCallback(
+    (event) => {
+      const [start, end, replacement] = calculateChange(
+        displayedValue,
+        event.target.value,
+      )
+      if (start === end && replacement === "@") {
+        onMentionStart(start)
+      }
 
-    const startIndex = displayIndexToActualIndex(start, value)
-    const endIndex = displayIndexToActualIndex(end, value, true)
-    onChange(`${value.substring(0, startIndex)}${replacement}${value.substring(endIndex)}`)
-  }, [displayedValue, onMentionStart, value, onChange])
-  const handleScroll: UIEventHandler<HTMLTextAreaElement> = useCallback(({ currentTarget: { scrollTop } }) => {
-    onScrollTopChange(scrollTop)
-  }, [onScrollTopChange])
-  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = useCallback(event => {
-    if (["ArrowDown", "ArrowUp"].includes(event.code) && onUpOrDownKey) {
-      event.preventDefault()
-      onUpOrDownKey(event.code === "ArrowDown" ? "DOWN" : "UP")
-    } else if (event.code === "Enter" && onEnterKey) {
-      event.preventDefault()
-      onEnterKey()
-    }
-  }, [onUpOrDownKey, onEnterKey])
+      const startIndex = displayIndexToActualIndex(start, value)
+      const endIndex = displayIndexToActualIndex(end, value, true)
+      onChange(
+        `${value.substring(0, startIndex)}${replacement}${value.substring(endIndex)}`,
+      )
+    },
+    [displayedValue, onMentionStart, value, onChange],
+  )
+  const handleScroll: UIEventHandler<HTMLTextAreaElement> = useCallback(
+    ({ currentTarget: { scrollTop } }) => {
+      onScrollTopChange(scrollTop)
+    },
+    [onScrollTopChange],
+  )
+  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = useCallback(
+    (event) => {
+      if (["ArrowDown", "ArrowUp"].includes(event.code) && onUpOrDownKey) {
+        event.preventDefault()
+        onUpOrDownKey(event.code === "ArrowDown" ? "DOWN" : "UP")
+      } else if (event.code === "Enter" && onEnterKey) {
+        event.preventDefault()
+        onEnterKey()
+      }
+    },
+    [onUpOrDownKey, onEnterKey],
+  )
   const handleSelection = useCallback(() => {
     if (!textareaRef.current) return
 

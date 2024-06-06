@@ -23,33 +23,56 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
   const [selectionStart, setSelectionStart] = useState(0)
   const [overlayScrollTop, setOverlayScrollTop] = useState(0)
   const filteredUsers = useMemo(
-    () => mentionFilter ? users.filter(({ fullname }) => fullname.toLowerCase().match(mentionFilter.toLowerCase())) : users,
-    [users, mentionFilter]
+    () =>
+      mentionFilter
+        ? users.filter(({ fullname }) =>
+            fullname.toLowerCase().match(mentionFilter.toLowerCase()),
+          )
+        : users,
+    [users, mentionFilter],
   )
-  const displayedValue = useMemo(() => actualValueToDisplayValue(actualValue), [actualValue])
+  const displayedValue = useMemo(
+    () => actualValueToDisplayValue(actualValue),
+    [actualValue],
+  )
   const removeMentionList = useCallback(() => {
     setAmpersandLocation(undefined)
     setAmpersandPosition(undefined)
     setMentionFilter(undefined)
   }, [])
 
-  const handleUpOrDownKey = useCallback((key: "UP" | "DOWN") => {
-    if (key === "DOWN" && selectedUserIndex < filteredUsers.length - 1) {
-      setSelectedUserIndex(current => current + 1)
-    } else if (key === "UP" && selectedUserIndex > 0) {
-      setSelectedUserIndex(current => current - 1)
-    }
-  }, [selectedUserIndex, filteredUsers.length])
+  const handleUpOrDownKey = useCallback(
+    (key: "UP" | "DOWN") => {
+      if (key === "DOWN" && selectedUserIndex < filteredUsers.length - 1) {
+        setSelectedUserIndex((current) => current + 1)
+      } else if (key === "UP" && selectedUserIndex > 0) {
+        setSelectedUserIndex((current) => current - 1)
+      }
+    },
+    [selectedUserIndex, filteredUsers.length],
+  )
 
-  const mentionUser = useCallback((index: number) => {
-    const selectedUser = filteredUsers[index]
-    setActualValue(actualValue => {
-      if (!ampersandLocation) return actualValue
+  const mentionUser = useCallback(
+    (index: number) => {
+      const selectedUser = filteredUsers[index]
+      setActualValue((actualValue) => {
+        if (!ampersandLocation) return actualValue
 
-      return actualValue.substring(0, displayIndexToActualIndex(ampersandLocation, actualValue)) + `@[${selectedUser.id};${selectedUser.fullname}]` + actualValue.substring(displayIndexToActualIndex(selectionStart, actualValue))
-    })
-    removeMentionList()
-  }, [ampersandLocation, selectionStart, filteredUsers, removeMentionList])
+        return (
+          actualValue.substring(
+            0,
+            displayIndexToActualIndex(ampersandLocation, actualValue),
+          ) +
+          `@[${selectedUser.id};${selectedUser.fullname}]` +
+          actualValue.substring(
+            displayIndexToActualIndex(selectionStart, actualValue),
+          )
+        )
+      })
+      removeMentionList()
+    },
+    [ampersandLocation, selectionStart, filteredUsers, removeMentionList],
+  )
 
   const handleEnterKey = useCallback(() => {
     mentionUser(selectedUserIndex)
@@ -60,16 +83,26 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
     setSelectedUserIndex(0)
   }, [])
 
-  const handleCaretPosition = useCallback((start: number, end: number) => {
-    setSelectionStart(start)
-    if (ampersandLocation != null && ampersandLocation < start && start === end) {
-      const filterValue = displayedValue.substring(ampersandLocation + 1, start)
-      if (/^[a-zA-Z0-9-]*$/.test(filterValue)) {
-        return setMentionFilter(filterValue)
+  const handleCaretPosition = useCallback(
+    (start: number, end: number) => {
+      setSelectionStart(start)
+      if (
+        ampersandLocation != null &&
+        ampersandLocation < start &&
+        start === end
+      ) {
+        const filterValue = displayedValue.substring(
+          ampersandLocation + 1,
+          start,
+        )
+        if (/^[a-zA-Z0-9-]*$/.test(filterValue)) {
+          return setMentionFilter(filterValue)
+        }
       }
-    }
-    removeMentionList()
-  }, [ampersandLocation, displayedValue, removeMentionList])
+      removeMentionList()
+    },
+    [ampersandLocation, displayedValue, removeMentionList],
+  )
 
   const handleScrollTop = useCallback((scrollTop: number) => {
     setOverlayScrollTop(scrollTop)
@@ -79,9 +112,12 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
     setAmpersandPosition([x + 10, y + 10])
   }, [])
 
-  const handleSelect = useCallback((index: number) => {
-    mentionUser(index)
-  }, [mentionUser])
+  const handleSelect = useCallback(
+    (index: number) => {
+      mentionUser(index)
+    },
+    [mentionUser],
+  )
 
   useEffect(() => {
     setSelectedUserIndex(0)
@@ -105,7 +141,9 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
           onMentionStart={handleMentionStart}
           onSelectionChange={handleCaretPosition}
           onScrollTopChange={handleScrollTop}
-          onUpOrDownKey={ampersandLocation == null ? undefined : handleUpOrDownKey}
+          onUpOrDownKey={
+            ampersandLocation == null ? undefined : handleUpOrDownKey
+          }
         />
       </Box>
       {mentionFilter != null && ampersandPosition && (
@@ -120,9 +158,9 @@ const MentionableInput: FC<MentionableInput> = ({ users }) => {
   )
 }
 
-const Box = styled.div<{ relative?: boolean, inlineBlock?: boolean }>`
-  ${({ relative }) => relative && 'position: relative;'}
-  ${({ inlineBlock }) => inlineBlock && 'display: inline-block;'}
+const Box = styled.div<{ relative?: boolean; inlineBlock?: boolean }>`
+  ${({ relative }) => relative && "position: relative;"}
+  ${({ inlineBlock }) => inlineBlock && "display: inline-block;"}
 `
 
 export default MentionableInput

@@ -1,6 +1,11 @@
-const mentionRegex = () => /@\[([a-z0-9-]{1,36});([a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*)\]/g
+const mentionRegex = () =>
+  /@\[([a-z0-9-]{1,36});([a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*)\]/g
 
-export const displayIndexToActualIndex = (displayIndex: number, actualValue: string, useMentionEndIndex = false) => {
+export const displayIndexToActualIndex = (
+  displayIndex: number,
+  actualValue: string,
+  useMentionEndIndex = false,
+) => {
   const mentionFormat = mentionRegex()
   let match = mentionFormat.exec(actualValue)
   let delta = 0
@@ -34,14 +39,18 @@ export const mentionLocations = (actualValue: string) => {
   return locations
 }
 
-export const actualValueToDisplayValue = (actualValue: string) => actualValue.replace(mentionRegex(), (_fullMatch, _id, name) => `@${name}`)
+export const actualValueToDisplayValue = (actualValue: string) =>
+  actualValue.replace(mentionRegex(), (_fullMatch, _id, name) => `@${name}`)
 
-export const calculateChange = (before: string, after: string): [number, number, string] => {
+export const calculateChange = (
+  before: string,
+  after: string,
+): [number, number, string] => {
   const shortest = before.length <= after.length ? "BEFORE" : "AFTER"
-  const shortestText = shortest === "BEFORE" ? before : after;
-  const longestText = shortest === "BEFORE" ? after : before;
+  const shortestText = shortest === "BEFORE" ? before : after
+  const longestText = shortest === "BEFORE" ? after : before
 
-  let startDiffIndex = shortestText.length;
+  let startDiffIndex = shortestText.length
   for (let i = 0; i < shortestText.length; i++) {
     if (shortestText[i] === longestText[i]) {
       continue
@@ -51,10 +60,13 @@ export const calculateChange = (before: string, after: string): [number, number,
     }
   }
 
-  let endDiffIndex = startDiffIndex;
+  let endDiffIndex = startDiffIndex
   const comparisonsLeft = shortestText.length - startDiffIndex
   for (let i = 0; i < comparisonsLeft; i++) {
-    if (shortestText[shortestText.length - 1 - i] === longestText[longestText.length - 1 -i]) {
+    if (
+      shortestText[shortestText.length - 1 - i] ===
+      longestText[longestText.length - 1 - i]
+    ) {
       continue
     } else {
       endDiffIndex = startDiffIndex + (comparisonsLeft - i)
@@ -68,13 +80,13 @@ export const calculateChange = (before: string, after: string): [number, number,
     return [
       startDiffIndex,
       endDiffIndex + sizeDiff,
-      shortestText.substring(startDiffIndex, endDiffIndex)
+      shortestText.substring(startDiffIndex, endDiffIndex),
     ]
   }
 
   return [
     startDiffIndex,
     endDiffIndex,
-    longestText.substring(startDiffIndex, endDiffIndex + sizeDiff)
+    longestText.substring(startDiffIndex, endDiffIndex + sizeDiff),
   ]
 }

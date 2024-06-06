@@ -1,9 +1,9 @@
-import { type FC, type ReactNode, useMemo, useRef, useEffect } from "react";
+import { type FC, type ReactNode, useMemo, useRef, useEffect } from "react"
 import styled from "@emotion/styled"
-import { mentionLocations } from "./utils";
-import Ampersand from "./Ampersand";
-import Mention from "./Mention";
-import { MentionTextareaCommon } from "./MentionTextarea";
+import { mentionLocations } from "./utils"
+import Ampersand from "./Ampersand"
+import Mention from "./Mention"
+import { MentionTextareaCommon } from "./MentionTextarea"
 
 const MentionOverlayBase = styled(MentionTextareaCommon.withComponent("div"))`
   position: absolute;
@@ -22,24 +22,33 @@ interface MentionOverlayProps {
   onMentionCoordinates: (x: number, y: number) => void
 }
 
-const MentionOverlay: FC<MentionOverlayProps> = ({ scrollTop, value, displayedValue, ampersandLocation, onMentionCoordinates }) => {
+const MentionOverlay: FC<MentionOverlayProps> = ({
+  scrollTop,
+  value,
+  displayedValue,
+  ampersandLocation,
+  onMentionCoordinates,
+}) => {
   const ref = useRef<HTMLDivElement>(null)
   const formattedValue = useMemo(() => {
     const unformattedDisplayValue = displayedValue.split("")
-    const lineBrokenValue = unformattedDisplayValue.reduce<ReactNode[]>((memo, char, index) => {
-      if (char === "\n") {
-        if (index === unformattedDisplayValue.length - 1) {
-          return [...memo, <br />, <>&nbsp;</>]
-        } else {
-          return [...memo, <br />]
+    const lineBrokenValue = unformattedDisplayValue.reduce<ReactNode[]>(
+      (memo, char, index) => {
+        if (char === "\n") {
+          if (index === unformattedDisplayValue.length - 1) {
+            return [...memo, <br />, <>&nbsp;</>]
+          } else {
+            return [...memo, <br />]
+          }
+        } else if (char === " ") {
+          return [...memo, <>&nbsp;</>]
+        } else if (index === ampersandLocation) {
+          return [...memo, <Ampersand onInitialize={onMentionCoordinates} />]
         }
-      } else if (char === " ") {
-        return [...memo, <>&nbsp;</>]
-      } else if (index === ampersandLocation) {
-        return [...memo, <Ampersand onInitialize={onMentionCoordinates} />]
-      }
-      return [...memo, char]
-    }, [])
+        return [...memo, char]
+      },
+      [],
+    )
 
     const locations = mentionLocations(value)
 
@@ -51,7 +60,9 @@ const MentionOverlay: FC<MentionOverlayProps> = ({ scrollTop, value, displayedVa
       if (i === 0) {
         mentionAddedValue.push(lineBrokenValue.slice(0, location[0]))
       } else {
-        mentionAddedValue.push(lineBrokenValue.slice(locations[i - 1][1], location[0]))
+        mentionAddedValue.push(
+          lineBrokenValue.slice(locations[i - 1][1], location[0]),
+        )
       }
       const mention = lineBrokenValue.slice(location[0], location[1])
       mentionAddedValue.push(<Mention>{mention}</Mention>)
@@ -69,11 +80,7 @@ const MentionOverlay: FC<MentionOverlayProps> = ({ scrollTop, value, displayedVa
     ref.current.scrollTop = scrollTop
   }, [scrollTop])
 
-  return (
-    <MentionOverlayBase ref={ref}>
-      {formattedValue}
-    </MentionOverlayBase>
-  )
+  return <MentionOverlayBase ref={ref}>{formattedValue}</MentionOverlayBase>
 }
 
 export default MentionOverlay

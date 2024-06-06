@@ -1,7 +1,13 @@
-import { expect, describe, it,  } from "vitest"
-import { displayIndexToActualIndex, actualValueToDisplayValue, calculateChange, mentionLocations } from "."
+import { expect, describe, it } from "vitest"
+import {
+  displayIndexToActualIndex,
+  actualValueToDisplayValue,
+  calculateChange,
+  mentionLocations,
+} from "."
 
-const actualValue = "Hey @[1;Girish Gopaul]! How are you? Me and @[2;Someone Else] are waiting for you."
+const actualValue =
+  "Hey @[1;Girish Gopaul]! How are you? Me and @[2;Someone Else] are waiting for you."
 
 describe("displayIndexToActualIndex", () => {
   it("returns 2 when the display index is 2", () => {
@@ -28,11 +34,15 @@ describe("displayIndexToActualIndex", () => {
 describe("actualValueToDisplayValue", () => {
   it("returns the same value when there is no mention", () => {
     const stringWithoutMention = "Hello Sir @[fakeMention]!"
-    expect(actualValueToDisplayValue(stringWithoutMention)).toBe(stringWithoutMention)
+    expect(actualValueToDisplayValue(stringWithoutMention)).toBe(
+      stringWithoutMention,
+    )
   })
 
   it("understands the mention format and returns the value to be displayed", () => {
-    expect(actualValueToDisplayValue(actualValue)).toBe("Hey @Girish Gopaul! How are you? Me and @Someone Else are waiting for you.")
+    expect(actualValueToDisplayValue(actualValue)).toBe(
+      "Hey @Girish Gopaul! How are you? Me and @Someone Else are waiting for you.",
+    )
   })
 })
 
@@ -64,6 +74,11 @@ describe("mentionLocations", () => {
   })
 
   it("returns the correct locations of mentions", () => {
-    expect(mentionLocations("Hey @[girish;Girish Gopaul]! Do you know @[him;Him]?")).toEqual([[4, 18], [32, 36]])
+    expect(
+      mentionLocations("Hey @[girish;Girish Gopaul]! Do you know @[him;Him]?"),
+    ).toEqual([
+      [4, 18],
+      [32, 36],
+    ])
   })
 })
