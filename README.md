@@ -19,7 +19,7 @@ const usersAvailable = useMemo(() => [
   - Raw value: Value that consists of mentions and metadatas. This value is not visible to users.
   - Visible value: Derived from the raw value but in a user friendly way.
   - <strong>Challenge:</strong> Remember the user interacts with the visible value, which needs to be properly translated into the actual raw value.
-    - Analogy: Think of it like working with lossy compression. Once you compress an image using lossy compression, some information is lost. Reversing the process to retrieve the original image is tricky. <strong>Similarly, translating user edits from the visible value back to the raw value can be complex and challenging.</strong>
+    - Analogy: Think of it like working with lossy compression. Once you compress an image using lossy compression, some information is lost. Reversing the process to retrieve the original image is tricky (or rather impossible). <strong>Similarly, translating user edits from the visible value back to the raw value can be complex and challenging.</strong>
 - HTML textareas do not support different formatting for small pieces of text, neither are they interactable (clickable, hoverable)
   - You would surely want mentions to be in a different color or formating.
   - You would also probably want users to be able to click or interact with those mentions.
@@ -28,3 +28,9 @@ const usersAvailable = useMemo(() => [
 ## Example in action
 
 <img src="./example.gif" alt="Example in action" />
+
+## Additional links
+
+Demo: https://mention-input-react.vercel.app/
+
+Unit tests: https://github.com/giriss/mention-input-react/blob/main/src/MentionableInput/utils/index.spec.ts
