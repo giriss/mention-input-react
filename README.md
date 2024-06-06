@@ -4,10 +4,12 @@ This project aims to showcase how to create a mentionable (taggable) textarea wh
 
 ## Usage
 ```jsx
-const usersAvailable = [
-  { id: 'foo', fullname: 'Foo Bar' },
-  { id: 'baz', fullname: 'Foo Baz' }
-]
+const usersAvailable = useMemo(() => [
+    { id: 'foo', fullname: 'Foo Bar' },
+    { id: 'baz', fullname: 'Foo Baz' }
+  ],
+  []
+)
 <MentionableInput users={usersAvailable} />
 ```
 
