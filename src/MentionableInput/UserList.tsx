@@ -41,7 +41,7 @@ const UserList: FC<UserListProps> = ({
   selectedIndex,
   onSelect,
 }) => (
-  <UserListBase position={position}>
+  <UserListBase position={position} data-testid="UserList">
     {users.map((user, index) => (
       <UserListItem
         key={user.id}

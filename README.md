@@ -33,4 +33,6 @@ const usersAvailable = useMemo(() => [
 
 Demo: https://mention-input-react.vercel.app/
 
-Unit tests: https://github.com/giriss/mention-input-react/blob/main/src/MentionableInput/utils/index.spec.ts
+Unit tests:
+- [src/MentionableInput/index.spec.tsx](https://github.com/giriss/mention-input-react/blob/main/src/MentionableInput/index.spec.tsx)
+- [src/MentionableInput/utils/index.spec.ts](https://github.com/giriss/mention-input-react/blob/main/src/MentionableInput/utils/index.spec.ts)

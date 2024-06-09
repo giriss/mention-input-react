@@ -52,9 +52,7 @@ export const calculateChange = (
 
   let startDiffIndex = shortestText.length
   for (let i = 0; i < shortestText.length; i++) {
-    if (shortestText[i] === longestText[i]) {
-      continue
-    } else {
+    if (shortestText[i] !== longestText[i]) {
       startDiffIndex = i
       break
     }
@@ -64,11 +62,9 @@ export const calculateChange = (
   const comparisonsLeft = shortestText.length - startDiffIndex
   for (let i = 0; i < comparisonsLeft; i++) {
     if (
-      shortestText[shortestText.length - 1 - i] ===
+      shortestText[shortestText.length - 1 - i] !==
       longestText[longestText.length - 1 - i]
     ) {
-      continue
-    } else {
       endDiffIndex = startDiffIndex + (comparisonsLeft - i)
       break
     }

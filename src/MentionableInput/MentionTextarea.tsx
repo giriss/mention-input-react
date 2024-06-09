@@ -107,6 +107,7 @@ const MentionTextarea: FC<MentionTextareaProps> = ({
       onKeyDown={handleKeyDown}
       onKeyUp={handleSelection}
       onClick={handleSelection}
+      data-testid="MentionTextarea"
     />
   )
 }

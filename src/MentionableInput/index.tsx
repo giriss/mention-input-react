@@ -10,11 +10,11 @@ export interface User {
   fullname: string
 }
 
-interface MentionableInput {
+interface MentionableInputProps {
   users: User[]
 }
 
-const MentionableInput: FC<MentionableInput> = ({ users }) => {
+const MentionableInput: FC<MentionableInputProps> = ({ users }) => {
   const [actualValue, setActualValue] = useState<string>("")
   const [ampersandLocation, setAmpersandLocation] = useState<number>()
   const [ampersandPosition, setAmpersandPosition] = useState<[number, number]>()

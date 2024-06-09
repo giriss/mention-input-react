@@ -80,7 +80,11 @@ const MentionOverlay: FC<MentionOverlayProps> = ({
     ref.current.scrollTop = scrollTop
   }, [scrollTop])
 
-  return <MentionOverlayBase ref={ref}>{formattedValue}</MentionOverlayBase>
+  return (
+    <MentionOverlayBase ref={ref} data-testid="MentionOverlay">
+      {formattedValue}
+    </MentionOverlayBase>
+  )
 }
 
 export default MentionOverlay
