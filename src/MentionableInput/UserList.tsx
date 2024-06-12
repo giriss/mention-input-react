@@ -1,4 +1,4 @@
-import { ComponentProps, FC } from "react"
+import { ComponentProps, FC, memo } from "react"
 import { User } from "."
 import styled from "@emotion/styled"
 
@@ -35,31 +35,32 @@ interface UserListProps {
   onSelect: (index: number) => void
 }
 
-const UserList: FC<UserListProps> = ({
-  users,
-  position,
-  selectedIndex,
-  onSelect,
-}) => (
-  <UserListBase position={position} data-testid="UserList">
-    {users.map((user, index) => (
-      <UserListItem
-        key={user.id}
-        user={user}
-        selected={selectedIndex === index}
-        onClick={() => onSelect(index)}
-      />
-    ))}
-  </UserListBase>
+const UserList: FC<UserListProps> = memo(
+  ({ users, position, selectedIndex, onSelect }) => (
+    <UserListBase position={position} data-testid="UserList">
+      {users.map((user, index) => (
+        <UserListItem
+          key={user.id}
+          user={user}
+          selected={selectedIndex === index}
+          onClick={() => onSelect(index)}
+        />
+      ))}
+    </UserListBase>
+  ),
 )
+
+UserList.displayName = "UserList"
 
 interface UserListItemProps extends ComponentProps<"div"> {
   user: User
   selected?: boolean
 }
 
-const UserListItem: FC<UserListItemProps> = ({ user, ...restProps }) => (
+const UserListItem: FC<UserListItemProps> = memo(({ user, ...restProps }) => (
   <UserListItemBase {...restProps}>{user.fullname}</UserListItemBase>
-)
+))
+
+UserListItem.displayName = "UserListItem"
 
 export default UserList

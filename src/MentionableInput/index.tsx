@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, type FC, useEffect } from "react"
+import { useCallback, useState, useMemo, type FC, useEffect, memo } from "react"
 import styled from "@emotion/styled"
 import { actualValueToDisplayValue, displayIndexToActualIndex } from "./utils"
 import UserList from "./UserList"
@@ -14,7 +14,7 @@ interface MentionableInputProps {
   users: User[]
 }
 
-const MentionableInput: FC<MentionableInputProps> = ({ users }) => {
+const MentionableInput: FC<MentionableInputProps> = memo(({ users }) => {
   const [actualValue, setActualValue] = useState<string>("")
   const [ampersandLocation, setAmpersandLocation] = useState<number>()
   const [ampersandPosition, setAmpersandPosition] = useState<[number, number]>()
@@ -44,9 +44,9 @@ const MentionableInput: FC<MentionableInputProps> = ({ users }) => {
   const handleUpOrDownKey = useCallback(
     (key: "UP" | "DOWN") => {
       if (key === "DOWN" && selectedUserIndex < filteredUsers.length - 1) {
-        setSelectedUserIndex((current) => current + 1)
+        setSelectedUserIndex(current => current + 1)
       } else if (key === "UP" && selectedUserIndex > 0) {
-        setSelectedUserIndex((current) => current - 1)
+        setSelectedUserIndex(current => current - 1)
       }
     },
     [selectedUserIndex, filteredUsers.length],
@@ -55,7 +55,7 @@ const MentionableInput: FC<MentionableInputProps> = ({ users }) => {
   const mentionUser = useCallback(
     (index: number) => {
       const selectedUser = filteredUsers[index]
-      setActualValue((actualValue) => {
+      setActualValue(actualValue => {
         if (!ampersandLocation) return actualValue
 
         return (
@@ -156,7 +156,9 @@ const MentionableInput: FC<MentionableInputProps> = ({ users }) => {
       )}
     </Box>
   )
-}
+})
+
+MentionableInput.displayName = "MentionableInput"
 
 const Box = styled.div<{ relative?: boolean; inlineBlock?: boolean }>`
   ${({ relative }) => relative && "position: relative;"}

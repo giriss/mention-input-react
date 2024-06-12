@@ -1,10 +1,10 @@
-import { FC, useEffect, useRef } from "react"
+import { FC, memo, useEffect, useRef } from "react"
 
 interface AmpersandProps {
   onInitialize: (x: number, y: number) => void
 }
 
-const Ampersand: FC<AmpersandProps> = ({ onInitialize }) => {
+const Ampersand: FC<AmpersandProps> = memo(({ onInitialize }) => {
   const spanRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
@@ -18,6 +18,8 @@ const Ampersand: FC<AmpersandProps> = ({ onInitialize }) => {
   }, [onInitialize])
 
   return <span ref={spanRef}>@</span>
-}
+})
+
+Ampersand.displayName = "Ampersand"
 
 export default Ampersand

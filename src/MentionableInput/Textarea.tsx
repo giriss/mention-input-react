@@ -3,6 +3,7 @@ import {
   FC,
   KeyboardEventHandler,
   UIEventHandler,
+  memo,
   useCallback,
   useRef,
 } from "react"
@@ -44,72 +45,77 @@ interface TextareaProps {
   onSelectionChange: (selectionStart: number, selectionEnd: number) => void
 }
 
-const Textarea: FC<TextareaProps> = ({
-  value,
-  displayedValue,
-  onMentionStart,
-  onChange,
-  onScrollTopChange,
-  onUpOrDownKey,
-  onEnterKey,
-  onSelectionChange,
-}) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = useCallback(
-    (event) => {
-      const [start, end, replacement] = calculateChange(
-        displayedValue,
-        event.target.value,
+const Textarea: FC<TextareaProps> = memo(
+  ({
+    value,
+    displayedValue,
+    onMentionStart,
+    onChange,
+    onScrollTopChange,
+    onUpOrDownKey,
+    onEnterKey,
+    onSelectionChange,
+  }) => {
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
+    const handleChange: ChangeEventHandler<HTMLTextAreaElement> = useCallback(
+      event => {
+        const [start, end, replacement] = calculateChange(
+          displayedValue,
+          event.target.value,
+        )
+        if (start === end && replacement === "@") {
+          onMentionStart(start)
+        }
+
+        const startIndex = displayIndexToActualIndex(start, value)
+        const endIndex = displayIndexToActualIndex(end, value, true)
+        onChange(
+          `${value.substring(0, startIndex)}${replacement}${value.substring(endIndex)}`,
+        )
+      },
+      [displayedValue, onMentionStart, value, onChange],
+    )
+    const handleScroll: UIEventHandler<HTMLTextAreaElement> = useCallback(
+      ({ currentTarget: { scrollTop } }) => {
+        onScrollTopChange(scrollTop)
+      },
+      [onScrollTopChange],
+    )
+    const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> =
+      useCallback(
+        event => {
+          if (["ArrowDown", "ArrowUp"].includes(event.code) && onUpOrDownKey) {
+            event.preventDefault()
+            onUpOrDownKey(event.code === "ArrowDown" ? "DOWN" : "UP")
+          } else if (event.code === "Enter" && onEnterKey) {
+            event.preventDefault()
+            onEnterKey()
+          }
+        },
+        [onUpOrDownKey, onEnterKey],
       )
-      if (start === end && replacement === "@") {
-        onMentionStart(start)
-      }
+    const handleSelection = useCallback(() => {
+      if (!textareaRef.current) return
 
-      const startIndex = displayIndexToActualIndex(start, value)
-      const endIndex = displayIndexToActualIndex(end, value, true)
-      onChange(
-        `${value.substring(0, startIndex)}${replacement}${value.substring(endIndex)}`,
-      )
-    },
-    [displayedValue, onMentionStart, value, onChange],
-  )
-  const handleScroll: UIEventHandler<HTMLTextAreaElement> = useCallback(
-    ({ currentTarget: { scrollTop } }) => {
-      onScrollTopChange(scrollTop)
-    },
-    [onScrollTopChange],
-  )
-  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = useCallback(
-    (event) => {
-      if (["ArrowDown", "ArrowUp"].includes(event.code) && onUpOrDownKey) {
-        event.preventDefault()
-        onUpOrDownKey(event.code === "ArrowDown" ? "DOWN" : "UP")
-      } else if (event.code === "Enter" && onEnterKey) {
-        event.preventDefault()
-        onEnterKey()
-      }
-    },
-    [onUpOrDownKey, onEnterKey],
-  )
-  const handleSelection = useCallback(() => {
-    if (!textareaRef.current) return
+      const { selectionStart, selectionEnd } = textareaRef.current
+      onSelectionChange(selectionStart, selectionEnd)
+    }, [onSelectionChange])
 
-    const { selectionStart, selectionEnd } = textareaRef.current
-    onSelectionChange(selectionStart, selectionEnd)
-  }, [onSelectionChange])
+    return (
+      <TextareaBase
+        ref={textareaRef}
+        value={displayedValue}
+        onChange={handleChange}
+        onScroll={handleScroll}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleSelection}
+        onClick={handleSelection}
+        data-testid="Textarea"
+      />
+    )
+  },
+)
 
-  return (
-    <TextareaBase
-      ref={textareaRef}
-      value={displayedValue}
-      onChange={handleChange}
-      onScroll={handleScroll}
-      onKeyDown={handleKeyDown}
-      onKeyUp={handleSelection}
-      onClick={handleSelection}
-      data-testid="Textarea"
-    />
-  )
-}
+Textarea.displayName = "Textarea"
 
 export default Textarea
