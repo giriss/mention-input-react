@@ -1,11 +1,11 @@
 import { expect, describe, it, vi } from "vitest"
 import { render } from "@testing-library/react"
-import MentionOverlay from "./MentionOverlay"
+import Overlay from "./Overlay"
 
-describe("MentionOverlay", () => {
+describe("Overlay", () => {
   it("displays simple values properly", async () => {
     const page = render(
-      <MentionOverlay
+      <Overlay
         value="Test"
         displayedValue="Test"
         scrollTop={0}
@@ -18,7 +18,7 @@ describe("MentionOverlay", () => {
 
   it("displays user mentions properly", async () => {
     const page = render(
-      <MentionOverlay
+      <Overlay
         value="Test @[1;First Last Name]!"
         displayedValue="Test @First Last Name!"
         scrollTop={0}
@@ -50,7 +50,7 @@ describe("MentionOverlay", () => {
 
     render(
       <div style={{ position: "relative" }}>
-        <MentionOverlay
+        <Overlay
           value="Test @"
           displayedValue="Test @"
           scrollTop={0}

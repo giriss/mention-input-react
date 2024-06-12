@@ -2,8 +2,8 @@ import { useCallback, useState, useMemo, type FC, useEffect } from "react"
 import styled from "@emotion/styled"
 import { actualValueToDisplayValue, displayIndexToActualIndex } from "./utils"
 import UserList from "./UserList"
-import MentionTextarea from "./MentionTextarea"
-import MentionOverlay from "./MentionOverlay"
+import Textarea from "./Textarea"
+import Overlay from "./Overlay"
 
 export interface User {
   id: string
@@ -126,14 +126,14 @@ const MentionableInput: FC<MentionableInputProps> = ({ users }) => {
   return (
     <Box relative>
       <Box relative inlineBlock>
-        <MentionOverlay
+        <Overlay
           scrollTop={overlayScrollTop}
           ampersandLocation={ampersandLocation}
           displayedValue={displayedValue}
           value={actualValue}
           onMentionCoordinates={handleMentionCoordinates}
         />
-        <MentionTextarea
+        <Textarea
           value={actualValue}
           displayedValue={displayedValue}
           onChange={setActualValue}

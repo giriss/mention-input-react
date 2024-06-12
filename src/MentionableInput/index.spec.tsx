@@ -2,10 +2,10 @@ import { expect, describe, it } from "vitest"
 import { fireEvent, render } from "@testing-library/react"
 import MentionableInput, { User } from "."
 
-describe("MentionOverlay", () => {
+describe("Overlay", () => {
   it("accepts and displays simple values properly", async () => {
     const { findByTestId } = setupMentionableInput()
-    const mentionTextarea = await findByTestId("MentionTextarea")
+    const mentionTextarea = await findByTestId("Textarea")
 
     fireEvent.change(mentionTextarea, { target: { value: "Hello" } })
 
@@ -14,7 +14,7 @@ describe("MentionOverlay", () => {
 
   it("opens up the mentionable users list", async () => {
     const { findByTestId } = setupMentionableInput()
-    const mentionTextarea = await findByTestId("MentionTextarea")
+    const mentionTextarea = await findByTestId("Textarea")
 
     fireEvent.change(mentionTextarea, { target: { value: "Hello " } })
     fireEvent.change(mentionTextarea, { target: { value: "Hello @" } })
@@ -27,7 +27,7 @@ describe("MentionOverlay", () => {
 
   it("allows to select and mention user using keys", async () => {
     const { findByTestId } = setupMentionableInput()
-    const mentionTextarea = await findByTestId("MentionTextarea")
+    const mentionTextarea = await findByTestId("Textarea")
 
     fireEvent.change(mentionTextarea, { target: { value: "Hello " } })
     fireEvent.change(mentionTextarea, { target: { value: "Hello @" } })

@@ -3,9 +3,9 @@ import styled from "@emotion/styled"
 import { mentionLocations } from "./utils"
 import Ampersand from "./Ampersand"
 import Mention from "./Mention"
-import { MentionTextareaCommon } from "./MentionTextarea"
+import { TextareaCommon } from "./Textarea"
 
-const MentionOverlayBase = styled(MentionTextareaCommon.withComponent("div"))`
+const OverlayBase = styled(TextareaCommon.withComponent("div"))`
   position: absolute;
   top: 0;
   bottom: 0;
@@ -14,7 +14,7 @@ const MentionOverlayBase = styled(MentionTextareaCommon.withComponent("div"))`
   overflow-y: auto;
 `
 
-interface MentionOverlayProps {
+interface OverlayProps {
   scrollTop: number
   value: string
   displayedValue: string
@@ -22,7 +22,7 @@ interface MentionOverlayProps {
   onMentionCoordinates: (x: number, y: number) => void
 }
 
-const MentionOverlay: FC<MentionOverlayProps> = ({
+const Overlay: FC<OverlayProps> = ({
   scrollTop,
   value,
   displayedValue,
@@ -81,10 +81,10 @@ const MentionOverlay: FC<MentionOverlayProps> = ({
   }, [scrollTop])
 
   return (
-    <MentionOverlayBase ref={ref} data-testid="MentionOverlay">
+    <OverlayBase ref={ref} data-testid="Overlay">
       {formattedValue}
-    </MentionOverlayBase>
+    </OverlayBase>
   )
 }
 
-export default MentionOverlay
+export default Overlay

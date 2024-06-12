@@ -1,12 +1,12 @@
 import { expect, describe, it, vi } from "vitest"
 import { render, fireEvent } from "@testing-library/react"
-import MentionTextarea from "./MentionTextarea"
+import Textarea from "./Textarea"
 
-describe("MentionTextarea", () => {
+describe("Textarea", () => {
   it("changes the value properly", async () => {
     const fn = vi.fn()
     const { baseElement } = render(
-      <MentionTextarea
+      <Textarea
         value=""
         displayedValue=""
         onChange={fn}
@@ -26,7 +26,7 @@ describe("MentionTextarea", () => {
   it("detects when mention starts", async () => {
     const fn = vi.fn()
     const { baseElement } = render(
-      <MentionTextarea
+      <Textarea
         value="test "
         displayedValue="test "
         onChange={() => {}}

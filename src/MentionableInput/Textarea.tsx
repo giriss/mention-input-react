@@ -9,7 +9,7 @@ import {
 import styled from "@emotion/styled"
 import { calculateChange, displayIndexToActualIndex } from "./utils"
 
-export const MentionTextareaCommon = styled.textarea`
+export const TextareaCommon = styled.textarea`
   padding: 10px;
   margin: 0;
   border: solid 1px transparent;
@@ -18,7 +18,7 @@ export const MentionTextareaCommon = styled.textarea`
   word-break: break-all;
 `
 
-const MentionTextareaBase = styled(MentionTextareaCommon)`
+const TextareaBase = styled(TextareaCommon)`
   position: relative;
   background: transparent;
   color: transparent;
@@ -33,7 +33,7 @@ const MentionTextareaBase = styled(MentionTextareaCommon)`
   }
 `
 
-interface MentionTextareaProps {
+interface TextareaProps {
   value: string
   displayedValue: string
   onChange: (value: string) => void
@@ -44,7 +44,7 @@ interface MentionTextareaProps {
   onSelectionChange: (selectionStart: number, selectionEnd: number) => void
 }
 
-const MentionTextarea: FC<MentionTextareaProps> = ({
+const Textarea: FC<TextareaProps> = ({
   value,
   displayedValue,
   onMentionStart,
@@ -99,7 +99,7 @@ const MentionTextarea: FC<MentionTextareaProps> = ({
   }, [onSelectionChange])
 
   return (
-    <MentionTextareaBase
+    <TextareaBase
       ref={textareaRef}
       value={displayedValue}
       onChange={handleChange}
@@ -107,9 +107,9 @@ const MentionTextarea: FC<MentionTextareaProps> = ({
       onKeyDown={handleKeyDown}
       onKeyUp={handleSelection}
       onClick={handleSelection}
-      data-testid="MentionTextarea"
+      data-testid="Textarea"
     />
   )
 }
 
-export default MentionTextarea
+export default Textarea
